@@ -1,0 +1,59 @@
+{% extends 'index.html' %}
+{% block title %}
+<title>Fashta | Login</title>
+{% endblock %}
+{% block body %}
+<div class="container-fluid bg-light p-5">
+    <!--================login_part Area =================-->
+    <div class="container bg-secondary p-5 rounded">
+        <div class="row align-items-center">
+            <div class="col-lg-6 col-md-6">
+                <div class="login_part_text text-center w-100">
+                    <div class="login_part_text_iner text-wrap">
+                        <h1>New to our Shop?</h1>
+                        <h5>create a Free Account</h5>
+                        <hr>
+                        <a href="{% url 'signup' %}" class="btn_3 text-warning">Signup</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6 col-md-6">
+                <div class="login_part_form">
+                    <div class="login_part_form_iner">
+                        <h3>Welcome Back !
+                            Please Sign in now!</h3>
+                        <hr>
+                        {% if messages %}
+                        {% for m in messages %}
+                        <div class="alert alert-danger text-center alert-dismissible fade show" role="alert">
+                            {{m}}
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        {% endfor %}
+                        {% endif %}
+                        <form class="row contact_form" action="" method="post">
+                            {% csrf_token %}
+                            <div class="col-md-12 form-group p_star">
+                                <input type="text" class="form-control" id="username" name="username"
+                                    placeholder="Username" autofocus>
+                            </div>
+                            <div class="col-md-12 form-group p_star">
+                                <input type="password" class="form-control" id="password" name="password"
+                                    placeholder="Password">
+                            </div>
+                            <div class="col-md-12 form-group">
+                                <button type="submit" value="submit" class="btn_3 bg-dark text-light rounded">
+                                    log in
+                                </button>
+                                <a class="lost_pass text-warning" href="{% url 'f-p-1' %}">forget password?</a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

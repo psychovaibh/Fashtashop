@@ -1,0 +1,193 @@
+{% extends 'index.html' %}
+{% load static %}
+
+{% block title %}
+<title>Fashta | Shop</title>
+{% endblock %}
+
+<body>
+
+    <!-- Pre Laoder is empty not including here -->
+    {% block loader %}
+    {% endblock %}
+
+
+    <!-- --------------------body part begins here-------------------------  -->
+
+    {% block body %}
+    <!-- Breadcrumb Section Begin -->
+    <section class="breadcrumb-option">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="breadcrumb__text">
+                        <h4>Shop</h4>
+                        <div class="breadcrumb__links">
+                            <a href="{% url 'home' %}">Home</a>
+                            <span>Shop</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Breadcrumb Section End -->
+
+    <!-- Shop Section Begin -->
+    <section class="shop spad">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-3">
+                    <div class="shop__sidebar">
+                        <div class="shop__sidebar__search">
+                            <form action="#">
+                                <input type="text" placeholder="Search...">
+                                <button type="submit"><span class="icon_search"></span></button>
+                            </form>
+                        </div>
+                        <!-- ------Main--Category--part----------- -->
+                        <div class="shop__sidebar__accordion">
+                            <div class="accordion" id="accordionExample">
+                                <div class="card">
+                                    <div class="card-heading">
+                                        <a data-toggle="collapse" data-target="#collapseZero">Main Categories</a>
+                                    </div>
+                                    <div id="collapseZero" class="collapse" data-parent="#accordionExample">
+                                        <div class="card-body">
+                                            <div class="shop__sidebar__categories">
+                                                <ul class="nice-scroll">
+                                                    <li><a href="/shop/All/{{sc}}/{{br}}/">All</a></li>
+                                                    {% for item in maincategorys %}
+                                                    <li><a href="/shop/{{item.name}}/{{sc}}/{{br}}/">{{item.name}}</a>
+                                                    </li>
+                                                    {% endfor %}
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- --------------------Sub---Category---Part------------------------ -->
+                                <div class="card">
+                                    <div class="card-heading">
+                                        <a data-toggle="collapse" data-target="#collapseOne">Sub Categories</a>
+                                    </div>
+                                    <div id="collapseOne" class="collapse" data-parent="#accordionExample">
+                                        <div class="card-body">
+                                            <div class="shop__sidebar__categories">
+                                                <ul class="nice-scroll">
+                                                    <li><a href="/shop/{{mc}}/All/{{br}}/">All</a></li>
+                                                    {% for item in subcategorys %}
+                                                    <li><a href="/shop/{{mc}}/{{item.name}}/{{br}}/">{{item.name}}</a>
+                                                    </li>
+                                                    {% endfor %}
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- --------Brand---Part---------------- -->
+                                <div class="card">
+                                    <div class="card-heading">
+                                        <a data-toggle="collapse" data-target="#collapseTwo">Brand</a>
+                                    </div>
+                                    <div id="collapseTwo" class="collapse" data-parent="#accordionExample">
+                                        <div class="card-body">
+                                            <div class="shop__sidebar__brand">
+                                                <ul>
+                                                    <li><a href="/shop/{{mc}}/{{sc}}/All/">All</a></li>
+                                                    {% for item in brands %}
+                                                    <li><a href="/shop/{{mc}}/{{sc}}/{{item.name}}/">{{item.name}}</a>
+                                                    </li>
+                                                    {% endfor %}
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-9">
+                    <div class="shop__product__option">
+                        <div class="row">
+                            <div class="col-lg-6 col-md-6 col-sm-6">
+                                <div class="shop__product__option__left">
+                                    <p>Showing 1–12 of 126 results</p>
+                                </div>
+                            </div>
+                            <div class="col-lg-6 col-md-6 col-sm-6">
+                                <div class="shop__product__option__right">
+                                    <p>Sort by Price:</p>
+                                    <form method="GET">
+                                        <select name="sort_by" onchange="this.form.submit()">
+                                            <option value="low_to_high"{% if request.GET.sort_by == "low_to_high" %} selected{% endif %}>Low To High</option>
+                                            <option value="high_to_low"{% if request.GET.sort_by == "high_to_low" %} selected{% endif %}>High To Low</option>
+                                            <option value="latest_first"{% if request.GET.sort_by == "latest_first" %} selected{% endif %}>Latest First</option>
+                                        </select>
+                                    </form>                                    
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- ------------------------------- products start----------------------- -->
+                    <div class="row">
+                        {% for items in products %}
+                        <div class="col-lg-3 col-md-6 col-sm-6 col-md-6 col-sm-6 mix new-arrivals">
+                            <div class="product__item">
+                                <a href="/shopDetails/{{items.id}}">
+                                    <div class="product__item__pic set-bg" data-setbg="{{items.pic1.url}}">
+                                        <span class="label">New</span>
+                                        <ul class="product__hover">
+                                            <li><a href="/wishlist/{{items.id}}"><img
+                                                        src="{% static '/img/icon/heart.png' %}" alt=""></a>
+                                            </li>
+                                            <li><a href="#"><img src="{% static '/img/icon/compare.png' %}" alt="">
+                                                    <span>Compare</span></a></li>
+                                        </ul>
+                                    </div>
+                                </a>
+                                <form action="{% url 'addtocart' %}" method="post">
+                                    {% csrf_token %}
+                                    <div class="product__item__text">
+                                        <input type="hidden" name="id" value="{{items.id}}">
+                                        <input type="hidden" name="qty" value="1">
+                                        <h5 class="mt-3">{{items.name}}</h5>
+                                        <button class="bg-white border-0 btn-outline-none"
+                                            style="height: 0px; width: 0px;"><a type="submit" class="add-cart">+ Add To
+                                                Cart</a></button>
+                                        <div class="rating">
+                                            <i class="fa fa-star"></i>
+                                            <i class="fa fa-star"></i>
+                                            <i class="fa fa-star"></i>
+                                            <i class="fa fa-star"></i>
+                                            <i class="fa fa-star-o"></i>
+                                        </div>
+                                        <h5><span class="text-danger">-{{items.discount}}%</span>
+                                            <del>&#8377;{{items.baseprice}}</del>
+                                        </h5>
+                                        <h3>&#8377;{{items.finalprice}}</h3>
+                                        <div class="product__color__select">
+                                            <label for="pc-1">
+                                                <input type="radio" id="pc-1">
+                                            </label>
+                                            <label class="active black" for="pc-2">
+                                                <input type="radio" id="pc-2">
+                                            </label>
+                                            <label class="grey" for="pc-3">
+                                                <input type="radio" id="pc-3">
+                                            </label>
+                                        </div>
+                                    </div>
+                            </div>
+                        </div>
+                        </form>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
+    </section>
+    <!-- Shop Section End -->
+    {% endblock %}

@@ -1,0 +1,163 @@
+{% extends 'index.html' %}
+{% load mycustomfilters %}
+{% load static %}
+{% block title %}
+<title>Fashta | Profile</title>
+{% endblock %}
+{% block body %}
+<div class="container-fluid pt-5 bg-light">
+    <div class="row">
+        <div class="col-md-6">
+            {% if buyerdata.pic %}
+            <img src="{{buyerdata.pic.url}}" height="500px" width="90%" alt="">
+            {% else %}
+            <img src="{% static '/img/noimage.jpg' %}" height="500px" width="90%" alt="">
+            {% endif %}
+        </div>
+        <div class="col-md-6">
+            <table class="table">
+                <tr>
+                    <th>Name</th>
+                    <td>{{buyerdata.name}}</td>
+                </tr>
+                <tr>
+                    <th>Username</th>
+                    <td>{{buyerdata.username}}</td>
+                </tr>
+                <tr>
+                    <th>Email</th>
+                    <td>{{buyerdata.email}}</td>
+                </tr>
+                <tr>
+                    <th>Phone</th>
+                    <td>{{buyerdata.phone}}</td>
+                </tr>
+                <tr>
+                    <th>Address</th>
+                    <td>{{buyerdata.address}}</td>
+                </tr>
+                <tr>
+                    <th>Pin</th>
+                    <td>{{buyerdata.pin}}</td>
+                </tr>
+                <tr>
+                    <th>City</th>
+                    <td>{{buyerdata.city}}</td>
+                </tr>
+                <tr>
+                    <th>State</th>
+                    <td>{{buyerdata.state}}</td>
+                </tr>
+                <tr>
+                    <td colspan="2"><a href="{% url 'updateprofile' %}" class="btn btn-secondary w-100 btn-sm"> update
+                            Profile</a></td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <h5 class="text-center mt-3 bg-secondary p-2 text-light" id="wishlist">Wishlist Section</h5>
+    {% if wishlist %}
+    <table class="table">
+        <tr>
+            <th></th>
+            <th>Name</th>
+            <th>Brand/Color/Size</th>
+            <th>Price</th>
+            <th>Cart</th>
+            <th>Remove</th>
+        </tr>
+        {% for item in wishlist %}
+        <tr>
+            <td><img src="{{item.product.pic1.url}}" height="80px" width="80px" class="rounded" alt=""></td>
+            <td>{{item.product.name}}</td>
+            <td>{{item.product.brandproduct.name}}/{{item.product.color}}/{{item.product.size}}</td>
+            <td>&#8377;{{item.product.finalprice}}</td>
+            <td><a href="/shopDetails/{{item.product.id}}/"><i class="fa fa-shopping-cart text-dark"></i></a></td>
+            <td><a href="/delete-wishlist/{{item.id}}/"><i class="fa fa-trash text-danger"></i></a></td>
+        </tr>
+        {% endfor %}
+    </table>
+    {% else %}
+    <p class="text-center mt-3">No Items in Wishlist</p>
+    {% endif %}
+    <hr>
+    <hr>
+    <h5 class="text-center mt-3 bg-secondary p-2 text-light" id="my-order">Your Order</h5>
+    {% if order %}
+    <div class="container pt-5">
+        <div class="row">
+            {% for item in order %}
+            <div class="col-md-3">
+                <table class="table table-bordered">
+                    <tr>
+                        <th>Order Id: </th>
+                        <td>{{item.co.id}}</td>
+                    </tr>
+                    <tr>
+                        <th>Order Status:</th>
+                        <td>{{Request|orderStatus:item.co.orderstatus}}</td>
+                    </tr>
+                    <tr>
+                        <th>Payment Mode</th>
+                        <td>{{Request|paymentMode:item.co.paymentmode}}</td>
+                    </tr>
+                    <tr>
+                        <th>Payment Status</th>
+                        <td>{{Request|paymentStatus:item.co.paymentstatus}}
+                            <br>
+                            {% if item.co.paymentmode|paymentStatusConfirmation:item.co.paymentstatus %}
+                            <a href="/re-payment/{{item.co.id}}">Pay Now</a>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Biller Name:</th>
+                        <td>{{item.co.name}}</td>
+                    </tr>
+                    <tr>
+                        <th>Shipping Address:</th>
+                        <td>{{item.co.address}}</td>
+                    </tr>
+                    <tr>
+                        <th>Biller Contact:</th>
+                        <td>{{item.co.phone}}</td>
+                    </tr>
+                    <tr>
+                        <th>Date of purchase:</th>
+                        <td>{{item.co.date}}</td>
+                    </tr>
+                </table>
+            </div>
+            <div class="col-md-9">
+                <div class="table-responsive">
+                    <table class="table">
+                        <tr>
+                            <th></th>
+                            <th>Name</th>
+                            <th>Brand/Color/Size</th>
+                            <th>Price</th>
+                            <th>Qty</th>
+                            <th>Total</th>
+                        </tr>
+                        {% for prod in item.cp %}
+                        <tr>
+                            <td><img src="{{prod.product.pic1.url}}" height="80px" width="80px" class="rounded" alt="">
+                            </td>
+                            <td>{{prod.product.name}}</td>
+                            <td>{{prod.product.brand}}/{{prod.product.color}}/{{prod.product.size}}</td>
+                            <td>&#8377;{{prod.product.finalprice}}</td>
+                            <td>{{prod.qty}}</td>
+                            <td>&#8377;{{prod.total}}</td>
+                        </tr>
+                        {% endfor %}
+                    </table>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% else %}
+    <p class="text-center mt-3">No Orders Yet!</p>
+    {% endif %}
+</div>
+{% endblock %}

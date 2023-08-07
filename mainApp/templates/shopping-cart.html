@@ -1,0 +1,117 @@
+{% extends 'index.html' %}
+{% load static %}
+{% block title %}
+<title>Fashta | Shopping-Cart</title>
+{% endblock %}
+
+{% block loader %}
+{% endblock %}
+
+{% block body %}
+<!-- Breadcrumb Section Begin -->
+<section class="breadcrumb-option">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="breadcrumb__text">
+                    <h4>Shopping Cart</h4>
+                    <div class="breadcrumb__links">
+                        <a href="{% url 'home' %}">Home</a>
+                        <a href="/shop/All/All/All">Shop</a>
+                        <span>Shopping Cart</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Breadcrumb Section End -->
+
+<!-- Shopping Cart Section Begin -->
+{% if cart %}
+<section class="shopping-cart spad">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8">
+                <div class="shopping__cart__table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Product</th>
+                                <th>Quantity</th>
+                                <th>Total</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for key,value in cart.items %}
+                            <tr>
+                                <td class="product__cart__item">
+                                    <div class="product__cart__item__pic">
+                                        <img src="{{value.pic}}" style="height: 5pc; width: 4pc;" alt="img not found">
+                                    </div>
+                                    <div class="product__cart__item__text">
+                                        <h6>{{value.name}}</h6>
+                                        <h5>&#8377;{{value.price}}</h5>
+                                    </div>
+                                </td>
+                                <td class="product__cart__item">
+                                    <div>
+                                        <div>
+                                            <a href="/updatecart/{{key}}/dec/"  class="text-dark"><i class="fa fa-minus-circle"></i></a>
+                                            <input type="text" disabled class="border-0 outline-0 bg-transparent w-25 text-center font-weight-bolder h5 " value="{{value.qty}}" name="upqty">
+                                            <a href="/updatecart/{{key}}/inc/"  class="text-dark"><i class="fa fa-plus-circle"></i></a>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="cart__price">&#8377;{{value.total}}</td>
+                                <td class="cart__close"><a href="/deletefromcart/{{key}}/"><i
+                                            class="fa fa-close"></i></a></td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                <div class="row">
+                    <div class="col-lg-6 col-md-6 col-sm-6">
+                        <div class="continue__btn">
+                            <a href="/shop/All/All/All/">Continue Shopping</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="cart__discount">
+                    <h6>Discount codes</h6>
+                    <form action="#">
+                        <input type="text" placeholder="Coupon code">
+                        <button type="submit">Apply</button>
+                    </form>
+                </div>
+                <div class="cart__total">
+                    <h6>Cart total</h6>
+                    <ul>
+                        <li>Subtotal <span>&#8377;{{subtotal}}</span></li>
+                        <li>Shipping <span>&#8377;{{shipping}}</span></li>
+                        <li>Total <span>&#8377;{{total}}</span></li>
+                    </ul>
+                    <a href="/checkOut/" class="primary-btn">Proceed to checkout</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% else %}
+<section class="shopping-cart spad">
+    <div class="container text-center">
+        <h3>OOPS! It Seems Cart is Empty.</h3>
+        <p>No items in cart!</p>
+        <br>
+        <div class="continue__btn">
+            <a href="/shop/All/All/All/">Continue Shopping</a>
+        </div>
+    </div>
+</section>
+{% endif %}
+<!-- Shopping Cart Section End -->
+{% endblock %}

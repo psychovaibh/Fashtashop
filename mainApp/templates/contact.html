@@ -1,0 +1,72 @@
+{% extends 'index.html' %}
+{% block title %}
+<title>Fashta | Contact</title>
+{% endblock %}
+
+<!-- -----------loader included---------------------- -->
+
+{% block body %}
+<!-- Map Begin -->
+<div class="container">
+    <div class="map">
+        <iframe
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2181.697821939725!2d79.06548096140041!3d30.73454144648514!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x39083ee051e628b1%3A0x167ce4efaf440f1e!2sKedarnath%2C%20Uttarakhand%20246445!5e0!3m2!1sen!2sin!4v1689068402944!5m2!1sen!2sin"
+            height="500" style="border:0;" allowfullscreen="" aria-hidden="false" tabindex="0"></iframe>
+    </div>
+</div>
+<!-- Map End -->
+
+<!-- Contact Section Begin -->
+<section class="contact spad">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-6 col-md-6">
+                <div class="contact__text">
+                    <div class="section-title">
+                        <span>Information</span>
+                        <h2>Contact Us</h2>
+                        <p>As you might expect of a company that began as a high-end interiors contractor, we pay
+                            strict attention.</p>
+                    </div>
+                    <ul>
+                        <li>
+                            <h4>Noida</h4>
+                            <p>Nehru Place, South East Delhi <br />+91 982-314-0958</p>
+                        </li>
+                        <li>
+                            <h4>Gurgaon</h4>
+                            <p>Imperial Mall <br />+91 345-423-9893</p>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-lg-6 col-md-6">
+                <div class="contact__form">
+                    <form action="/contact/" method="post">
+                        {% csrf_token %}
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <input type="text" name="name" placeholder="Name" required>
+                            </div>
+                            <div class="col-lg-6">
+                                <input type="email" name="email" placeholder="Email" required>
+                            </div>
+                            <div class="col-lg-12">
+                                <textarea placeholder="Message" name="message" required></textarea>
+                                <button type="submit" class="site-btn">Send Message</button>
+                            </div>
+                        </div>
+                        {% if messages %}
+                        {% for i in messages %}
+                        <hr>
+                        <h5 class="text-info">{{i}}</h5>
+                        {% endfor %}
+                        {% endif %}
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Contact Section End -->
+{% endblock %}

@@ -1,0 +1,154 @@
+{% extends 'index.html' %}
+{% load static %}
+{% block title %}
+<title>Fashta | Checkout</title>
+{% endblock %}
+{% block loader %}
+{% endblock %}
+
+{% block body %}
+<!-- Breadcrumb Section Begin -->
+<section class="breadcrumb-option">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="breadcrumb__text">
+                    <h4>Check Out</h4>
+                    <div class="breadcrumb__links">
+                        <a href="{% url 'home' %}">Home</a>
+                        <a href="/shop/All/All/All">Shop</a>
+                        <span>Check Out</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Breadcrumb Section End -->
+
+<hr>
+<!-- Checkout Section Begin -->
+<section class="checkout spad">
+    <div class="container">
+        <div class="checkout__form">
+            <div class="row">
+                <div class="col-lg-6 col-md-6">
+                    <form action="#" method="post">
+                        <input type="hidden" name="form_type" value="type_1">
+                        {% csrf_token %}
+                        <h6 class="checkout__title">Billing Details</h6>
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="checkout__input">
+                                    <p>Name<span>*</span></p>
+                                    <input required type="text" name="name" autofocus>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="checkout__input">
+                            <p>Address<span>*</span></p>
+                            <input required type="text" placeholder="Full Address" name="address"
+                                class="checkout__input__add">
+                        </div>
+                        <div class="checkout__input">
+                            <p>Town/City<span>*</span></p>
+                            <input required type="text" name="city">
+                        </div>
+                        <div class="checkout__input">
+                            <p>State<span>*</span></p>
+                            <input required type="text" name="state">
+                        </div>
+                        <div class="checkout__input">
+                            <p>Postcode / ZIP / PIN<span>*</span></p>
+                            <input required type="text" name="pin" maxlength="6">
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <div class="checkout__input">
+                                    <p>Phone<span>*</span></p>
+                                    <input required type="text" maxlength="11" name="phone">
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="checkout__input">
+                                    <p>Email<span>*</span></p>
+                                    <input required type="text" name="email">
+                                </div>
+                            </div>
+                        </div>
+                        <button type="submit" class="site-btn w-100">Add Address</button>
+                    </form>
+                </div>
+
+                <!-- ----------------------------------------address taken success-------------------------------------- -->
+
+
+                <!-- --------------------------------------------checkout taken start---------------------------------------- -->
+                {% if cart and bill %}
+                <div class="col-lg-6 col-md-6">
+                    <div class="checkout__order">
+                        <form action="" method="post">
+                            {% csrf_token %}
+                            <input type="hidden" name="form_type" value="type_2">
+                            <hr>
+                            <h4 class="order__title">Saved Address!</h4>
+                            {% for item in bill %}
+                            <label>
+                                <input type="radio" name="selected_address" value="{{item.id}}" required>
+                                {{item.name}}, {{item.address}}, {{item.phone}}, {{item.state}}, {{item.pin}}
+                            </label>
+                            <br>
+                            {% endfor %}
+                            <br>
+                            <hr>
+                            <h4 class="order__title">Your order</h4>
+                            <div class="checkout__order__products">Product * Qty <span>Total</span></div>
+                            <ul class="checkout__total__products">
+                                {% for items in cart.values %}
+                                <li>{{items.name}} * {{items.qty}}<span>{{items.price}}</span></li>
+                                {% endfor %}
+                            </ul>
+                            <ul class="checkout__total__all">
+                                <li>Subtotal <span>&#8377;{{subtotal}}</span></li>
+                                <li>Subtotal <span>&#8377;{{shipping}}</span></li>
+                                <li>Total <span>&#8377;{{total}}</span></li>
+                            </ul>
+                            <h4>Payment Gateway.</h4>
+                            <br>
+                            <div class="container">
+                                <div class="radio_btn">
+                                    <input type="radio" value="COD" name="mode" checked />
+                                    <label for="COD">COD</label>
+                                    <div class="check"></div>
+                                </div>
+                                <div class="radio_btn">
+                                    <input type="radio" value="NetBanking" name="mode" />
+                                    <label for="NetBanking">NetBanking/Card/UPI </label>
+                                    <div class="check"></div>
+                                </div>
+                            </div>
+                            <button type="submit" class="site-btn">PLACE ORDER</button>
+                        </form>
+                    </div>
+                </div>
+                {% else %}
+                <section class="shopping-cart spad">
+                    <div class="container text-center">
+                        <h4>OOPS! Please Add Billing Address & Details.</h4>
+                        <h1>OR</h1>
+                        <h3>OOPS! It Seems Cart is Empty.</h3>
+                        <p>No items in cart!</p>
+                        <br>
+                        <div class="continue__btn">
+                            <a href="/shop/All/All/All/">Continue Shopping</a>
+                        </div>
+                    </div>
+                </section>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Checkout Section End -->
+
+{% endblock %}
