@@ -364,7 +364,7 @@ def checkOutPage(Request):
                 Request.session['cart'] = {}
 
             if(mode=="COD"):
-                return HttpResponseRedirect("/confirmation")
+                return HttpResponseRedirect("/confirmation/"+str(co.id)+"/")
             else:
                 orderAmount = co.total*100
                 orderCurrency = "INR"
@@ -377,8 +377,8 @@ def checkOutPage(Request):
                     "displayAmount":co.total,
                     "api_key":settings.RAZORPAY_API_KEY,
                     "order_id":paymentId,
-                    "User":buyer,
-                    "id":-1
+                    "User":Buyer,
+                    "id":co.id
                 })
         
 
@@ -386,12 +386,12 @@ def checkOutPage(Request):
 
 
 @login_required(login_url='/login/')
-def repayment(Request,id):
+def repaymentpage(Request,id):
     try:
         co = checkout.objects.get(id=id)
         Buyer = buyer.objects.get(username=Request.user.username)
-        orderCurrency = "INR"
         orderAmount = co.total*100
+        orderCurrency = "INR"
         paymentOrder = client.order.create(dict(amount=orderAmount,currency=orderCurrency,payment_capture=1))
         paymentId = paymentOrder['id']
         co.paymentmode=1
@@ -401,7 +401,7 @@ def repayment(Request,id):
                 "displayAmount":co.total,
                 "api_key":settings.RAZORPAY_API_KEY,
                 "order_id":paymentId,
-                "User":buyer,
+                "User":Buyer,
                 "id":id
                 })
     except:
@@ -409,23 +409,21 @@ def repayment(Request,id):
 
 
 @login_required(login_url="/login/")
-def paymentSuccessPage(request,rppid,rpoid,rpsid):
-    buyeruser = buyer.objects.get(username=request.user)
-    check = checkout.objects.filter(user=buyeruser)
-    check=check[::-1]
-    check=check[0]
+def paymentSuccessPage(Request,id,rppid,rpoid,rpsid):
+    check = checkout.objects.get(id=id)
     check.rppid=rppid
     check.paymentstatus=1
     check.save()
-    return HttpResponseRedirect('/confirmation/')
+    print(id)
+    return HttpResponseRedirect('/confirmation/'+str(id)+"/")
 
 
 @login_required(login_url="/login/")
-def confirmationPage(Request):
+def confirmationPage(Request,id):
     try:
         Buyer = buyer.objects.get(username=Request.user.username)
-        co = checkout.objects.filter(buyer=Buyer).order_by("-id").first()
-        cart = checkOutProduct.objects.filter(checkout=checkout.objects.get(id=co.id))
+        co = checkout.objects.get(id=id)
+        cart = checkOutProduct.objects.filter(checkout=co)
         subtotal = 0
         shipping = 0
         total = 0

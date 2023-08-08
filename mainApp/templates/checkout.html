@@ -84,9 +84,10 @@
 
 
                 <!-- --------------------------------------------checkout taken start---------------------------------------- -->
-                {% if cart and bill %}
+                {% if cart %}
                 <div class="col-lg-6 col-md-6">
                     <div class="checkout__order">
+                        {% if bill %}
                         <form action="" method="post">
                             {% csrf_token %}
                             <input type="hidden" name="form_type" value="type_2">
@@ -129,13 +130,18 @@
                             </div>
                             <button type="submit" class="site-btn">PLACE ORDER</button>
                         </form>
+                        {% else %}
+                        <section class="fa-shopping-cart spad">
+                            <div class="container text-center">
+                                <h4>OOPS! Please Add Billing Address & Details.</h4>
+                            </div>
+                        </section>
+                        {% endif %}
                     </div>
                 </div>
                 {% else %}
                 <section class="shopping-cart spad">
                     <div class="container text-center">
-                        <h4>OOPS! Please Add Billing Address & Details.</h4>
-                        <h1>OR</h1>
                         <h3>OOPS! It Seems Cart is Empty.</h3>
                         <p>No items in cart!</p>
                         <br>
