@@ -10,7 +10,7 @@ from django.conf import settings
 from django.core.mail import send_mail
 from fashta.settings import RAZORPAY_API_KEY,RAZORPAY_API_SECRET_KEY
 import razorpay
-
+from django.core.paginator import Paginator
 
 
 
@@ -61,7 +61,11 @@ def shopPage(Request,mc,sc,br,sort_by=None):
     maincategorys = maincategory.objects.all().order_by("id")
     subcategorys = subcategory.objects.all().order_by("-id")
     brands = brand.objects.all().order_by("id")
-    return render(Request,'shop.html',{'products': products, 'maincategorys': maincategorys, 'subcategorys' : subcategorys, 'brands' : brands, 'mc' : mc, 'sc' : sc, 'br' : br})
+
+    paginator = Paginator(products,8)
+    page_number = Request.GET.get("page")
+    page_obj = paginator.get_page(page_number)
+    return render(Request,'shop.html',{'page_obj':page_obj,'products': products, 'maincategorys': maincategorys, 'subcategorys' : subcategorys, 'brands' : brands, 'mc' : mc, 'sc' : sc, 'br' : br})
 
 
 def shopDetailsPage(Request,id):
@@ -475,8 +479,12 @@ def search(Request):
         maincat_list = maincategory.objects.all().order_by("-id")
         subcat_list = subcategory.objects.all().order_by("-id")
         bra_list = brand.objects.all().order_by("-id")
+
+        paginator = Paginator(products,8)
+        page_number = Request.GET.get("page")
+        page_obj = paginator.get_page(page_number)
         return render(Request,"shop.html",
-            {'products':products,'maincategory':maincat_list,'subcategory':subcat_list,'brand':bra_list,'mc':"All",'sc':"All",'br':"All"})
+            {'page_obj':page_obj,'maincategory':maincat_list,'subcategory':subcat_list,'brand':bra_list,'mc':"All",'sc':"All",'br':"All"})
     else:
         return HttpResponseRedirect('/')
 
